@@ -1,0 +1,7 @@
+{
+  "name": "FFmpeg Camera",
+  "homeassistant": "2023.7.3",
+  "country": "CN",
+  "domains": ["camera"],
+  "render_readme": true
+}

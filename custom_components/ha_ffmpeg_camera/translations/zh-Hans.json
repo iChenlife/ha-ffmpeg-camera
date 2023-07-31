@@ -1,0 +1,89 @@
+{
+    "title": "FFmpeg Camera",
+    "config": {
+      "error": {
+        "unknown": "未知错误",
+        "already_exists": "摄像头URL已使用",
+        "unable_still_load": "无法载入预览图 (例如预览图URL无效或需要认证信息)，详情请查阅日志",
+        "no_still_image_or_stream_url": "预览图URL和串流URL至少需要配置一样",
+        "invalid_still_image": "无法从预览图URL获取有效图像",
+        "malformed_url": "URL格式错误",
+        "relative_url": "不允许使用相对URL路径",
+        "template_error": "模板错误，详情请查阅日志",
+        "timeout": "加载URL超时",
+        "stream_no_route_to_host": "尝试连接串流时找不到主机",
+        "stream_io_error": "连接串流时IO错误. 是否配置了错误的RTSP传输协议?",
+        "stream_not_permitted": "连接串流时连接错误. 是否配置了错误的RTSP传输协议?"
+      },
+      "abort": {
+        "single_instance_allowed": "同一份配置只允许配置一个实例"
+      },
+      "step": {
+        "user": {
+          "description": "配置摄像头连接信息",
+          "data": {
+            "still_image_url": "预览图URL(例如 http://...)",
+            "stream_source": "串流URL (例如 rtsp://...)",
+            "rtsp_transport": "RTSP传输协议",
+            "authentication": "认证",
+            "limit_refetch_to_url_change": "仅预览图URL改变时加载新图像",
+            "password": "密码",
+            "username": "用户名",
+            "framerate": "帧率(Hz)",
+            "verify_ssl": "校验SSL",
+            "extra_arguments": "FFmpeg额外参数"
+          }
+        },
+        "user_confirm_still": {
+          "title": "预览",
+          "description": "![预览图]({preview_url})",
+          "data": {
+            "confirmed_ok": "预览图似乎正常"
+          }
+        }
+      }
+    },
+    "options": {
+      "step": {
+        "init": {
+          "data": {
+            "still_image_url": "预览图URL(例如 http://...)",
+            "stream_source": "串流URL (例如 rtsp://...)",
+            "rtsp_transport": "RTSP传输协议",
+            "authentication": "认证",
+            "limit_refetch_to_url_change": "仅预览图URL改变时加载新图像",
+            "password": "密码",
+            "username": "用户名",
+            "framerate": "帧率(Hz)",
+            "verify_ssl": "校验SSL",
+            "extra_arguments": "FFmpeg额外参数"
+          },
+          "data_description": {
+            "use_wallclock_as_timestamps": "该选项可能会纠正一些相机上有缺陷的时间戳实现所导致的分段或崩溃问题"
+          }
+        },
+        "confirm_still": {
+          "title": "预览",
+          "description": "![预览图]({preview_url})",
+          "data": {
+              "confirmed_ok": "预览图似乎正常"
+          }
+        }
+      },
+      "error": {
+        "unknown": "未知错误",
+        "already_exists": "摄像头URL已使用",
+        "unable_still_load": "无法载入预览图 (例如预览图URL无效或需要认证信息)，详情请查阅日志",
+        "no_still_image_or_stream_url": "预览图URL和串流URL至少需要配置一样",
+        "invalid_still_image": "无法从预览图URL获取有效图像",
+        "malformed_url": "URL格式错误",
+        "relative_url": "不允许使用相对URL路径",
+        "template_error": "模板错误，详情请查阅日志",
+        "timeout": "加载URL超时",
+        "stream_no_route_to_host": "尝试连接串流时找不到主机",
+        "stream_io_error": "连接串流时IO错误. 是否配置了错误的RTSP传输协议?",
+        "stream_not_permitted": "连接串流时连接错误. 是否配置了错误的RTSP传输协议?"
+      }
+    }
+  }
+  
