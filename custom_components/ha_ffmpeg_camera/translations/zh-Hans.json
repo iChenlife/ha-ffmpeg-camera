@@ -22,6 +22,7 @@
         "user": {
           "description": "配置摄像头连接信息",
           "data": {
+            "name": "设备名称",
             "still_image_url": "预览图URL(例如 http://...)",
             "stream_source": "串流URL (例如 rtsp://...)",
             "rtsp_transport": "RTSP传输协议",
@@ -47,6 +48,7 @@
       "step": {
         "init": {
           "data": {
+            "name": "设备名称",
             "still_image_url": "预览图URL(例如 http://...)",
             "stream_source": "串流URL (例如 rtsp://...)",
             "rtsp_transport": "RTSP传输协议",

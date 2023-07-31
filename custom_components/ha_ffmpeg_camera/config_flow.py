@@ -45,7 +45,6 @@ from homeassistant.data_entry_flow import FlowResult, UnknownFlow
 from homeassistant.exceptions import TemplateError
 from homeassistant.helpers import config_validation as cv, template as template_helper
 from homeassistant.helpers.httpx_client import get_async_client
-from homeassistant.util import slugify
 
 from .camera import FFmpegCamera, generate_auth
 from .const import (
@@ -65,7 +64,6 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 DEFAULT_DATA = {
-    CONF_NAME: DEFAULT_NAME,
     CONF_AUTHENTICATION: HTTP_BASIC_AUTHENTICATION,
     CONF_LIMIT_REFETCH_TO_URL_CHANGE: False,
     CONF_FRAMERATE: 2,
@@ -84,6 +82,10 @@ def build_schema(
 ):
     """Create schema for camera config setup."""
     spec = {
+        vol.Required(
+            CONF_NAME,
+            description={"suggested_value": user_input.get(CONF_NAME, "")},
+        ): str,
         vol.Optional(
             CONF_STILL_IMAGE_URL,
             description={"suggested_value": user_input.get(CONF_STILL_IMAGE_URL, "")},
@@ -201,23 +203,6 @@ async def async_test_still(
     if fmt not in SUPPORTED_IMAGE_TYPES:
         return {CONF_STILL_IMAGE_URL: "invalid_still_image"}, None
     return {}, f"image/{fmt}"
-
-
-def slug(
-    hass: HomeAssistant, template: str | template_helper.Template | None
-) -> str | None:
-    """Convert a camera url into a string suitable for a camera name."""
-    url = ""
-    if not template:
-        return None
-    if not isinstance(template, template_helper.Template):
-        template = template_helper.Template(template, hass)
-    try:
-        url = template.async_render(parse_result=False)
-        return slugify(yarl.URL(url).host)
-    except (ValueError, TemplateError, TypeError) as err:
-        _LOGGER.error("Syntax error in '%s': %s", template, err)
-    return None
 
 
 async def async_test_stream(
@@ -338,16 +323,13 @@ class FFmpegCamConfigFlow(ConfigFlow, domain=DOMAIN):
                     user_input[CONF_LIMIT_REFETCH_TO_URL_CHANGE] = False
                     still_url = user_input.get(CONF_STILL_IMAGE_URL)
                     stream_url = user_input.get(CONF_STREAM_SOURCE)
-                    name = (
-                        slug(hass, still_url) or slug(hass, stream_url) or DEFAULT_NAME
-                    )
                     if still_url is None:
                         # If user didn't specify a still image URL,
                         # The automatically generated still image that stream generates
                         # is always jpeg
                         user_input[CONF_CONTENT_TYPE] = "image/jpeg"
                     self.user_input = user_input
-                    self.title = name
+                    self.title = user_input.get(CONF_NAME)
 
                     # temporary preview for user to check the image
                     self.context["preview_cam"] = user_input
@@ -384,25 +366,6 @@ class FFmpegCamConfigFlow(ConfigFlow, domain=DOMAIN):
             description_placeholders={"preview_url": preview_url},
             errors=None,
         )
-
-    async def async_step_import(self, import_config: dict[str, Any]) -> FlowResult:
-        """Handle config import from yaml."""
-        # abort if we've already got this one.
-        if self.check_for_existing(import_config):
-            return self.async_abort(reason="already_exists")
-        # Don't bother testing the still or stream details on yaml import.
-        still_url = import_config.get(CONF_STILL_IMAGE_URL)
-        stream_url = import_config.get(CONF_STREAM_SOURCE)
-        name = import_config.get(
-            CONF_NAME,
-            slug(self.hass, still_url) or slug(self.hass, stream_url) or DEFAULT_NAME,
-        )
-
-        if CONF_LIMIT_REFETCH_TO_URL_CHANGE not in import_config:
-            import_config[CONF_LIMIT_REFETCH_TO_URL_CHANGE] = False
-        still_format = import_config.get(CONF_CONTENT_TYPE, "image/jpeg")
-        import_config[CONF_CONTENT_TYPE] = still_format
-        return self.async_create_entry(title=name, data={}, options=import_config)
 
 
 class FFmpegCameraOptionsFlowHandler(OptionsFlow):

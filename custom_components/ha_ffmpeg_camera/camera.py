@@ -13,7 +13,6 @@ from haffmpeg.tools import IMAGE_JPEG
 
 from homeassistant.components.camera import (
     DEFAULT_CONTENT_TYPE,
-    PLATFORM_SCHEMA,
     Camera,
     CameraEntityFeature,
 )
@@ -53,57 +52,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__name__)
-
-
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
-    {
-        vol.Required(vol.Any(CONF_STILL_IMAGE_URL, CONF_STREAM_SOURCE)): cv.template,
-        vol.Optional(vol.Any(CONF_STILL_IMAGE_URL, CONF_STREAM_SOURCE)): cv.template,
-        vol.Optional(CONF_AUTHENTICATION, default=HTTP_BASIC_AUTHENTICATION): vol.In(
-            [HTTP_BASIC_AUTHENTICATION, HTTP_DIGEST_AUTHENTICATION]
-        ),
-        vol.Optional(CONF_LIMIT_REFETCH_TO_URL_CHANGE, default=False): cv.boolean,
-        vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
-        vol.Optional(CONF_PASSWORD): cv.string,
-        vol.Optional(CONF_USERNAME): cv.string,
-        vol.Optional(CONF_CONTENT_TYPE, default=DEFAULT_CONTENT_TYPE): cv.string,
-        vol.Optional(CONF_FRAMERATE, default=2): vol.Any(
-            cv.small_float, cv.positive_int
-        ),
-        vol.Optional(CONF_VERIFY_SSL, default=True): cv.boolean,
-        vol.Optional(CONF_RTSP_TRANSPORT): vol.In(RTSP_TRANSPORTS),
-    }
-)
-
-
-async def async_setup_platform(
-    hass: HomeAssistant,
-    config: ConfigType,
-    async_add_entities: AddEntitiesCallback,
-    discovery_info: DiscoveryInfoType | None = None,
-) -> None:
-    """Set up a generic IP Camera."""
-
-    image = config.get(CONF_STILL_IMAGE_URL)
-    stream = config.get(CONF_STREAM_SOURCE)
-    config_new = {
-        CONF_NAME: config[CONF_NAME],
-        CONF_STILL_IMAGE_URL: image.template if image is not None else None,
-        CONF_STREAM_SOURCE: stream.template if stream is not None else None,
-        CONF_AUTHENTICATION: config.get(CONF_AUTHENTICATION),
-        CONF_USERNAME: config.get(CONF_USERNAME),
-        CONF_PASSWORD: config.get(CONF_PASSWORD),
-        CONF_LIMIT_REFETCH_TO_URL_CHANGE: config.get(CONF_LIMIT_REFETCH_TO_URL_CHANGE),
-        CONF_CONTENT_TYPE: config.get(CONF_CONTENT_TYPE),
-        CONF_FRAMERATE: config.get(CONF_FRAMERATE),
-        CONF_VERIFY_SSL: config.get(CONF_VERIFY_SSL),
-    }
-
-    hass.async_create_task(
-        hass.config_entries.flow.async_init(
-            DOMAIN, context={"source": SOURCE_IMPORT}, data=config_new
-        )
-    )
 
 
 async def async_setup_entry(
