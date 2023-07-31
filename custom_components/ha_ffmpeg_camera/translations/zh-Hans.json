@@ -27,11 +27,11 @@
             "stream_source": "串流URL (例如 rtsp://...)",
             "rtsp_transport": "RTSP传输协议",
             "authentication": "认证",
-            "limit_refetch_to_url_change": "仅预览图URL改变时加载新图像",
+            "limit_refetch_to_url_change": "限制为仅在 URL 变化时重新获取预览图",
             "password": "密码",
             "username": "用户名",
             "framerate": "帧率(Hz)",
-            "verify_ssl": "校验SSL",
+            "verify_ssl": "验证 SSL 证书            ",
             "extra_arguments": "FFmpeg额外参数"
           }
         },
@@ -39,7 +39,7 @@
           "title": "预览",
           "description": "![预览图]({preview_url})",
           "data": {
-            "confirmed_ok": "预览图正常"
+            "confirmed_ok": "确认预览图正常"
           }
         }
       }
@@ -53,11 +53,11 @@
             "stream_source": "串流URL (例如 rtsp://...)",
             "rtsp_transport": "RTSP传输协议",
             "authentication": "认证",
-            "limit_refetch_to_url_change": "仅预览图URL改变时加载新图像",
+            "limit_refetch_to_url_change": "限制为仅在 URL 变化时重新获取预览图",
             "password": "密码",
             "username": "用户名",
             "framerate": "帧率(Hz)",
-            "verify_ssl": "校验SSL",
+            "verify_ssl": "验证 SSL 证书",
             "extra_arguments": "FFmpeg额外参数"
           },
           "data_description": {
@@ -68,7 +68,7 @@
           "title": "预览",
           "description": "![预览图]({preview_url})",
           "data": {
-              "confirmed_ok": "预览图正常"
+              "confirmed_ok": "确认预览图正常"
           }
         }
       },
