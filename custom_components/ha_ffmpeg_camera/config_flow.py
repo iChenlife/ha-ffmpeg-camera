@@ -293,7 +293,7 @@ def register_preview(hass: HomeAssistant):
     hass.data[DOMAIN][IMAGE_PREVIEWS_ACTIVE] = True
 
 
-class GenericIPCamConfigFlow(ConfigFlow, domain=DOMAIN):
+class FFmpegCamConfigFlow(ConfigFlow, domain=DOMAIN):
     """Config flow for generic IP camera."""
 
     VERSION = 1
@@ -306,9 +306,9 @@ class GenericIPCamConfigFlow(ConfigFlow, domain=DOMAIN):
     @staticmethod
     def async_get_options_flow(
         config_entry: ConfigEntry,
-    ) -> GenericOptionsFlowHandler:
+    ) -> FFmpegCameraOptionsFlowHandler:
         """Get the options flow for this handler."""
-        return GenericOptionsFlowHandler(config_entry)
+        return FFmpegCameraOptionsFlowHandler(config_entry)
 
     def check_for_existing(self, options: dict[str, Any]) -> bool:
         """Check whether an existing entry is using the same URLs."""
@@ -405,7 +405,7 @@ class GenericIPCamConfigFlow(ConfigFlow, domain=DOMAIN):
         return self.async_create_entry(title=name, data={}, options=import_config)
 
 
-class GenericOptionsFlowHandler(OptionsFlow):
+class FFmpegCameraOptionsFlowHandler(OptionsFlow):
     """Handle Generic IP Camera options."""
 
     def __init__(self, config_entry: ConfigEntry) -> None:
@@ -422,7 +422,7 @@ class GenericOptionsFlowHandler(OptionsFlow):
 
         if user_input is not None:
             errors, still_format = await async_test_still(
-                hass, self.config_entry.options | user_input
+                hass, user_input
             )
             errors = errors | await async_test_stream(hass, user_input)
             still_url = user_input.get(CONF_STILL_IMAGE_URL)
